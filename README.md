@@ -1,44 +1,49 @@
-# Recurrent Neural Networks (RNN) for Sequence Modeling
+# Sentiment Analysis with Recurrent Neural Networks (RNNs)
 
 ## Overview
-This repository contains the implementation of a Recurrent Neural Network (RNN) architecture designed for sequence modeling and temporal data analysis. The project demonstrates the end-to-end machine learning lifecycle, from data ingestion and preprocessing to model training, evaluation, and deployment preparation.
+This repository showcases a comprehensive Deep Learning project focused on Natural Language Processing (NLP), specifically **Binary Sentiment Analysis**. The objective is to accurately classify movie reviews as either positive or negative using various advanced Recurrent Neural Network (RNN) architectures.
 
-The primary objective of this project is to showcase advanced proficiency in developing Deep Learning models using modern frameworks, handling vanishing/exploding gradient problems, and optimizing sequential data pipelines.
+The project demonstrates the end-to-end Machine Learning lifecycle: from data ingestion and text preprocessing to building, training, and evaluating complex sequential models. By experimenting with different RNN variants, it provides a comparative analysis of their classification accuracy and computational efficiency.
+
+## Dataset
+The project utilizes the **IMDB Movie Review Dataset**, a benchmark dataset in the NLP community for sentiment classification.
+* **Volume:** 50,000 highly polar movie reviews.
+* **Split:** 25,000 reviews for training and 25,000 for testing. (The training set is further divided for validation to monitor early stopping and overfitting).
+* **Task:** Binary classification (0 for Negative, 1 for Positive).
 
 ## Technical Stack
-* **Language:** Python 3.9+
-* **Deep Learning Framework:** PyTorch / TensorFlow
-* **Data Processing:** NumPy, Pandas, Scikit-learn
-* **Visualization:** Matplotlib, Seaborn
+* **Language:** Python 3.12
+* **Deep Learning Framework:** TensorFlow & Keras
+* **Data Ingestion:** TensorFlow Datasets (`tfds`)
+* **Data Processing:** NumPy
 
-## Architecture Details
-The model leverages a robust RNN-based architecture tailored to capture temporal dependencies in sequential data. 
+## Model Architectures
+To understand the impact of different sequence modeling techniques, this project implements and compares the following architectures:
+1. **Gated Recurrent Units (GRU):** A streamlined recurrent cell that effectively captures long-term dependencies while mitigating the vanishing gradient problem, often requiring less computational overhead than standard LSTMs.
+2. **Bidirectional LSTM (BiLSTM):** Processes sequences in both forward and backward directions, allowing the network to understand context from both past and future words simultaneously.
+3. **Bidirectional GRU (BiGRU):** Combines the computational efficiency of GRUs with the deep contextual understanding of bidirectional processing.
 
-Key architectural components include:
-* **Input Layer:** Designed to handle variable-length sequences with appropriate padding and masking.
-* **Recurrent Layers:** Configured RNN/LSTM/GRU cells with optimized hidden layer dimensions to balance computational efficiency and representation power.
-* **Regularization:** Implementation of Dropout mechanisms to prevent overfitting during training.
-* **Output Layer:** Dense layers mapped to specific task requirements (e.g., classification probabilities or continuous predictions).
-
-## Data Pipeline and Preprocessing
-Robust data preprocessing is critical for the stability of recurrent models. The pipeline includes:
-1. **Data Cleaning:** Handling missing values and anomalies in sequences.
-2. **Normalization:** Applying statistical scaling (e.g., Min-Max, Standard Scaler) to accelerate gradient convergence.
-3. **Sequence Generation:** Implementing sliding window techniques to generate sequence-to-target pairs for supervised learning.
+**Common Model Pipeline:**
+* **Text Vectorization:** Converts raw text into integer sequences with a constrained vocabulary size (e.g., 10,000 tokens) and maximum sequence length (e.g., 250 tokens).
+* **Embedding Layer:** Transforms integer tokens into dense vectors of fixed size (64 dimensions), utilizing masking to correctly handle padded sequence lengths.
+* **Recurrent Layer:** GRU / BiLSTM / BiGRU.
+* **Dense Layers:** Hidden dense layers with ReLU activation, followed by a final output layer using a Sigmoid activation function to output binary probability.
 
 ## Training and Optimization
-The model was trained with a focus on reproducibility and stability.
-* **Optimizer:** Adam or RMSprop with dynamic learning rate scheduling.
-* **Callbacks:** Early stopping based on validation loss to ensure optimal weight retention.
-* **Gradient Clipping:** Applied to mitigate the exploding gradient problem typical in sequence models.
+* **Loss Function:** Binary Crossentropy, ideal for binary classification tasks.
+* **Optimizer:** Adam Optimizer (learning rate = 0.001) for robust and adaptive gradient descent.
+* **Batching & Epochs:** Trained over 20 epochs using large batch sizes (2048) for stable gradient estimates, evaluated iteratively on a held-out validation set.
 
-## Evaluation and Results
-The model's performance is rigorously evaluated using robust validation strategies. It demonstrates strong generalization capabilities on unseen test data, effectively capturing underlying temporal patterns. Metrics are strictly monitored to ensure model reliability in real-world scenarios.
+## Insights and Evaluation
+The models are strictly evaluated on an unseen test set (25,000 samples). 
+Key considerations explored in this project include:
+* **Bidirectional Context:** How reading text in both directions significantly improves the model's ability to capture sarcasm and complex sentence structures compared to unidirectional models.
+* **Vocabulary and Truncation:** The trade-offs between vocabulary size, sequence truncation length, model memory usage, and the retention of rich context.
 
 ## Installation and Usage
 
 ### Prerequisites
-Ensure that you have Python and `pip` installed. It is recommended to use a virtual environment.
+Ensure Python is installed along with the required libraries.
 
 ### Setup
 1. Clone the repository:
@@ -47,21 +52,12 @@ Ensure that you have Python and `pip` installed. It is recommended to use a virt
    cd Recurrent-Neural-Networks-RNNs-
    ```
 
-2. Install the required dependencies:
+2. Install the necessary dependencies (TensorFlow, TFDS, NumPy, Matplotlib):
    ```bash
-   pip install -r requirements.txt
+   pip install tensorflow tensorflow-datasets numpy matplotlib
    ```
 
-### Execution
-Run the main script to initiate the model pipeline:
-```bash
-python main.py
-```
-
-## Future Enhancements
-* Integration of Attention Mechanisms to improve context retention over extended sequences.
-* Migration to advanced sequence architectures for comparative analysis.
-* Model deployment via containerized REST APIs for scalable inference.
+3. Run the Jupyter Notebook to explore the preprocessing, model training, and evaluation steps.
 
 ## License
-This project is licensed under the MIT License.
+This project is open-source and available under the MIT License.
